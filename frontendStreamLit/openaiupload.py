@@ -1,8 +1,9 @@
 from openai import OpenAI
 import os
 
+# keyy = os.environ.get('API_KEY')
 # Initialize the OpenAI client
-client = OpenAI(api_key=os.environ.get('API_KEY'))
+client = OpenAI(api_key="sk-proj-3ThQs6nvx2E9f3SMxPIQT3BlbkFJzjTuW70JKduEO0szEf2T")
 
 def upload_file_OPENAI(folder_path):
     # Check if the folder exists

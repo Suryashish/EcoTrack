@@ -1,9 +1,0 @@
-Steel Alloy A,"""Production capacity, Energy consumption, Raw material input, CO2 emissions, Waste generation""",API_Response
-Iron Ore B,"""raw materials, energy consumption, transportation, process emissions""","| Category    | Iron Ore B                                 |
-|-------------|-------------------------------------------|
-| Raw Materials | 53.7                                      |
-| Energy Consumption | 14.8                                  |
-| Transportation | 5.4                                   |
-| Process Emissions | 18.6                                |"
-Recycled Steel,"""Production quantity, types of scrap metal used, energy source for melting, transportation distance for raw materials and finished goods""","Recycled Steel,""Production quantity (tons)"",Types of scrap metal used,Energy source for melting,Transportation distance for raw materials (miles),Transportation distance for finished goods (miles)
-125000,Shredded scrap,Electricity,250,50"

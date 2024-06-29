@@ -1,53 +1,42 @@
-import csv
-import requests
-import json
-import os
+import openai
+import time
 
-# OpenAI API endpoint and your API key
-api_url = "https://api.openai.com/v1/chat/completions"
-api_key = os.environ.get('API_KEY')
-# Your context
-context = "When I provide the name of a manufacturing process, output the most important and required fields that are needed for calculating carbon emissions and related data, in a clear CSV format, directly start answering, no extra text before or after. Output inside a double inverted comma. For example, look for the amount of production, transportation, raw materials required, the various processes, etc., as per the process requirement. recheck before outputting"
+# Set your API key
+openai.api_key = 'sk-proj-3ThQs6nvx2E9f3SMxPIQT3BlbkFJzjTuW70JKduEO0szEf2T'
 
-# Function to make API call
-def call_openai_api(message):
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {api_key}"
-    }
-    
-    data = {
-        "model": "gpt-3.5-turbo",
-        "messages": [
-            {"role": "system", "content": context},
-            {"role": "user", "content": message}
-        ]
-    }
-    
-    response = requests.post(api_url, headers=headers, data=json.dumps(data))
-    return response.json()
+# Create an Assistant
+assistant = openai.beta.assistants.create(
+    name="My Assistant",
+    instructions="You are a helpful assistant.",
+    model="gpt-3.5-turbo-1106",
+    tools=[{"type": "retrieval"}],
+    file_ids=["existing-file-id"]  # Use the ID of your pre-uploaded file
+)
 
-# Read input CSV file and make API calls
-with open('csv/OnlyTitles.csv', 'r') as input_file, open('csv/InputsOutput.csv', 'a', newline='') as output_file:
-    csv_reader = csv.reader(input_file)
-    csv_writer = csv.writer(output_file)
-    
-    next(csv_reader)  # Skip the first line
-    
-    for row in csv_reader:
-        # Assuming the text you want to send is in the first column
-        text = row[0]
-        
-        # Make API call
-        result = call_openai_api(text)
-        
-        # Process the result and write to CSV
-        if 'choices' in result and len(result['choices']) > 0:
-            output = result['choices'][0]['message']['content']
-            csv_writer.writerow([text, output])
-            print(f"Processed: {text}")
-        else:
-            csv_writer.writerow([text, "Error: " + str(result)])
-            print(f"Error processing: {text}")
+# Create a Thread
+thread = openai.beta.threads.create()
 
-print("Processing complete. Results have been appended to output_results.csv")
+# Add a Message to the Thread
+message = openai.beta.threads.messages.create(
+    thread_id=thread.id,
+    role="user",
+    content="What information can you provide based on the context in the file?"
+)
+
+# Run the Assistant
+run = openai.beta.threads.runs.create(
+    thread_id=thread.id,
+    assistant_id=assistant.id,
+    instructions="Please provide information based on the context in the file."
+)
+
+# Wait for the Run to complete
+while run.status != 'completed':
+    time.sleep(1)
+    run = openai.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
+
+# Retrieve the response
+messages = openai.beta.threads.messages.list(thread_id=thread.id)
+for message in messages.data:
+    if message.role == 'assistant':
+        print(message.content[0].text.value)

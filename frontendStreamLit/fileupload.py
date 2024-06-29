@@ -6,7 +6,7 @@ def file_upload_page():
     st.title("File Upload Page")
 
     # Create a folder to store uploaded files if it doesn't exist
-    UPLOAD_FOLDER = "Files"
+    UPLOAD_FOLDER = "DataAnalysis"
     if not os.path.exists(UPLOAD_FOLDER):
         os.makedirs(UPLOAD_FOLDER)
 
@@ -14,7 +14,7 @@ def file_upload_page():
 
     if uploaded_file is not None:
         file_details = {
-            "Filename": uploaded_file.name,
+            "Filename": "Uploaded",
             "FileType": uploaded_file.type,
             "FileSize": uploaded_file.size
         }
@@ -39,6 +39,8 @@ def file_upload_page():
             st.write("PDF file uploaded and saved. Processing of PDF content not implemented in this example.")
         else:
             st.write("File uploaded and saved successfully. Further processing depends on the file type.")
+        
+        return True
 
 if __name__ == "__main__":
     file_upload_page()
