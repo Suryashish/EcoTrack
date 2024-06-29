@@ -1,11 +1,11 @@
 import csv
 import requests
 import json
+import os
 
 # OpenAI API endpoint and your API key
 api_url = "https://api.openai.com/v1/chat/completions"
-api_key = "sk-proj-3ThQs6nvx2E9f3SMxPIQT3BlbkFJzjTuW70JKduEO0szEf2T"
-
+api_key = os.environ.get('API_KEY')
 # Your context
 context = "When I provide the name of a manufacturing process, output the most important and required fields that are needed for calculating carbon emissions and related data, in a clear CSV format, directly start answering, no extra text before or after. Output inside a double inverted comma. For example, look for the amount of production, transportation, raw materials required, the various processes, etc., as per the process requirement. recheck before outputting"
 

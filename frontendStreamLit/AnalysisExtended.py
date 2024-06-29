@@ -2,9 +2,10 @@ import openai
 import requests
 import csv
 import json
+import os
 
 # Set up the OpenAI client
-client = openai.OpenAI(api_key='sk-proj-3ThQs6nvx2E9f3SMxPIQT3BlbkFJzjTuW70JKduEO0szEf2T')
+client = openai.OpenAI(api_key=os.environ.get('API_KEY'))
 
 # Retrieve the most recent file ID
 files = client.files.list()
