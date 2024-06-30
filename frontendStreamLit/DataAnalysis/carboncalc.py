@@ -37,3 +37,4 @@ def calculate_and_save_carbon_emissions():
     output_data.to_csv(output_file, index=False)
 
     print(f"Estimated carbon emissions calculated and saved to {output_file}.")
+    return True

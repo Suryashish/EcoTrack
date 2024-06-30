@@ -1,9 +1,10 @@
 import streamlit as st
 from fileupload import file_upload_page
-from openaiupload import upload_file_OPENAI
 from DataAnalysis.csvtographfinal import plot_data
 from DataAnalysis.carboncalc import calculate_and_save_carbon_emissions
-from datetime import date
+
+from DataAnalysis.prediction import predict_carbon_emissions
+from DataAnalysis.prediction import report
 
 def navbar():
     # Use columns to create a horizontal layout
@@ -70,44 +71,34 @@ def main():
 
             if calc_button:
                 with st.spinner("Calculating carbon emission..."):
-                    try:
-                        result = calculate_and_save_carbon_emissions()
+                    result = calculate_and_save_carbon_emissions()
+                    if result:
                         st.success("Calculation completed successfully!")
-                        st.write(result)  # Assuming calculate_carbon_emission returns a result
-                    except FileNotFoundError:
-                        st.error("Error: The uploaded file could not be found. Please try uploading again.")
-                    except Exception as e:
-                        st.error(f"An error occurred during calculation: {str(e)}")
-                        st.exception(e)  # This will display the full traceback
-
-        if not st.session_state.file_uploaded:
-            st.info("Please upload a file to proceed with calculation.")
+                        
             
-            if st.button("Upload to OpenAI"):
-                try:
-                    upload_file_OPENAI("Files/Untitled.py")
-                except FileNotFoundError:
-                    st.error("Error: The file to upload to OpenAI could not be found.")
-                except Exception as e:
-                    st.error(f"An error occurred during OpenAI upload: {str(e)}")
 
     elif st.session_state.page == "analyze":
 
-        year_month = st.date_input(
-            "Select Year and Month",
-            value=date.today().replace(day=1),
-            format="YYYY-MM"
-)
+        st.title("User Input Example")
+        # Create a text input box
+        year = st.text_input("Enter the Year and month (YYYY-MM)")
+        # Create a submit button
+
+        # Create a submit button
+        if st.button("Submit"):
+            if year:
+                predict_carbon_emissions(year)
+            else:
+                st.write("Please enter some text before submitting.")
+
 
         st.title("Analyze Data")
         if st.session_state.file_uploaded:
             if st.button("Display Analysis"):
-                try:
-                    plot_data()
-                except FileNotFoundError:
-                    st.error("Error: The data file could not be found. Please upload a file first.")
-                except Exception as e:
-                    st.error(f"An error occurred during analysis: {str(e)}")
+
+                temp12 = plot_data()
+                if temp12:
+                    report()
         else:
             st.warning("Please upload a file in the Upload section before analyzing.")
 

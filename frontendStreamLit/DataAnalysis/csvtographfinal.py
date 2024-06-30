@@ -8,10 +8,10 @@ def plot_data():
 
     # Step 2: Extract x and y values from the DataFrame
     days = df['Date']
-    values = df['Estimated Carbon Emission']
+    values = df['Predicted Carbon Emission']
 
     # Step 3: Create the plot
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(7, 4))
 
     ax.plot(days, values, marker='o', linestyle='-')
 
@@ -23,7 +23,6 @@ def plot_data():
 
     # Step 5: Display the plot in Streamlit
     st.pyplot(fig)
+    return True
 
-    # Optionally, display the DataFrame
-    st.dataframe(df)
 
